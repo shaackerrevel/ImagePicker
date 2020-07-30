@@ -65,6 +65,11 @@ class CameraProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
      */
     private var mFileDir: File? = null
 
+    /**
+     * If true, attempt to initialize the camera app with the front camera
+     */
+    private var mUseFrontCamera: Boolean = false
+
     init {
         val bundle = activity.intent.extras!!
 
@@ -73,6 +78,8 @@ class CameraProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
         fileDir?.let {
             mFileDir = File(it)
         }
+
+        mUseFrontCamera = bundle.getBoolean(ImagePicker.EXTRA_USE_FRONT_CAMERA)
     }
 
     /**
@@ -132,7 +139,7 @@ class CameraProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
 
         // Check if file exists
         if (file != null && file.exists()) {
-            val cameraIntent = IntentUtils.getCameraIntent(this, file)
+            val cameraIntent = IntentUtils.getCameraIntent(this, file, mUseFrontCamera)
             activity.startActivityForResult(cameraIntent, CAMERA_INTENT_REQ_CODE)
         } else {
             setError(R.string.error_failed_to_create_camera_image_file)

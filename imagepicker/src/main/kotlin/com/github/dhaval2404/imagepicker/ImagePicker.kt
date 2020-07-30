@@ -39,6 +39,8 @@ open class ImagePicker {
         internal const val EXTRA_FILE_PATH = "extra.file_path"
         internal const val EXTRA_MIME_TYPES = "extra.mime_types"
 
+        internal const val EXTRA_USE_FRONT_CAMERA = "extra.use_front_camera"
+
         /**
          * Use this to use ImagePicker in Activity Class
          *
@@ -115,6 +117,8 @@ open class ImagePicker {
          * Max File Size
          */
         private var maxSize: Long = 0
+
+        private var useFrontCamera: Boolean = false
 
         private var imageProviderInterceptor: ((ImageProvider) -> Unit)? = null
 
@@ -281,6 +285,14 @@ open class ImagePicker {
         }
 
         /**
+         * Request the camera dialog to use the front camera instead
+         */
+        fun useFrontCamera(useFrontCamera: Boolean): Builder {
+            this.useFrontCamera = useFrontCamera
+            return this
+        }
+
+        /**
          * Pick Image Provider if not specified
          */
         private fun showImageProviderDialog(reqCode: Int) {
@@ -331,6 +343,8 @@ open class ImagePicker {
                 putLong(EXTRA_IMAGE_MAX_SIZE, maxSize)
 
                 putString(EXTRA_SAVE_DIRECTORY, saveDir)
+
+                putBoolean(EXTRA_USE_FRONT_CAMERA, useFrontCamera)
             }
         }
 

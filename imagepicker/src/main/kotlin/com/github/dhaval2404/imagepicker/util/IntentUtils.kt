@@ -62,7 +62,7 @@ object IntentUtils {
     /**
      * @return Intent Camera Intent
      */
-    fun getCameraIntent(context: Context, file: File): Intent? {
+    fun getCameraIntent(context: Context, file: File, useFrontCamera: Boolean): Intent? {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -73,6 +73,15 @@ object IntentUtils {
         } else {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file))
         }
+
+        val cameraInt = when(useFrontCamera) {
+            true -> 1
+            false -> 0
+        }
+
+        intent.putExtra("android.intent.extras.CAMERA_FACING", cameraInt)
+        intent.putExtra("android.intent.extras.LENS_FACING_FRONT", cameraInt);
+        intent.putExtra("android.intent.extra.USE_FRONT_CAMERA", useFrontCamera);
 
         return intent
     }
